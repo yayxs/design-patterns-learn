@@ -33,26 +33,26 @@
 那你说好办
 
 ```javascript
-const wangerhua = {};
+const wangerhua = {}
 
-wangerhua.name = "weh";
-wangerhua.age = 16;
-wangerhua.sex = "女";
+wangerhua.name = 'weh'
+wangerhua.age = 16
+wangerhua.sex = '女'
 
-const lierdan = {};
+const lierdan = {}
 
-lierdan.name = "led";
-lierdan.age = 15;
-lierdan.sex = "男";
+lierdan.name = 'led'
+lierdan.age = 15
+lierdan.sex = '男'
 ```
 
 为了在你的女神`三菜` 面前耍一手，你熬夜写了班级全部的`40` 多人，眼看花名册即将完事，你满怀期待的发给你的女神，打算先让她看看……，但是呢，作为旁观者的我们呢，发现是有点问题的，这样熬夜效率不高，虽然也能造出一个花名册，但是此举并不会得到女神的芳心。改进下吧
 
 ```javascript
 function Student() {
-  this.name = "wangerhua";
-  this.age = "16";
-  this.sex = "女";
+  this.name = 'wangerhua'
+  this.age = '16'
+  this.sex = '女'
 }
 // 然后通过`new` 关键词 活生生的`new` 出 一个王二花
 ```
@@ -63,13 +63,13 @@ function Student() {
 // 然后通过`new` 关键词 活生生的`new` 出 一个王二花
 
 function Student(name, age, sex) {
-  this.name = name;
-  this.age = age;
-  this.sex = sex;
+  this.name = name
+  this.age = age
+  this.sex = sex
 }
 
-const 王二花 = new Student("", "", "");
-const 李二蛋 = new Student("", "", "");
+const 王二花 = new Student('', '', '')
+const 李二蛋 = new Student('', '', '')
 ```
 
 或者我们使用最舒服的方式`es6` 的`class` 方式
@@ -77,9 +77,9 @@ const 李二蛋 = new Student("", "", "");
 ```javascript
 class Student {
   constructor(name, age, sex) {
-    this.name = name;
-    this.age = age;
-    this.sex = sex;
+    this.name = name
+    this.age = age
+    this.sex = sex
   }
 }
 ```
@@ -90,10 +90,10 @@ class Student {
 
 ```js
 function Persion(name, age, profession, work) {
-  this.name = name;
-  this.age = age;
-  this.profession = profession;
-  this.work = work;
+  this.name = name
+  this.age = age
+  this.profession = profession
+  this.work = work
 }
 ```
 
@@ -101,20 +101,20 @@ function Persion(name, age, profession, work) {
 
 ```js
 function Factory(name, age, profession) {
-  let work; // 是干什么的
+  let work // 是干什么的
   switch (profession) {
-    case "coder":
-      work = ["摸鱼"];
-      break;
-    case "coder":
-      work = ["摸鱼"];
-      break;
-    case "Fisherman":
-      work = ["捕鱼"];
+    case 'coder':
+      work = ['摸鱼']
+      break
+    case 'coder':
+      work = ['摸鱼']
+      break
+    case 'Fisherman':
+      work = ['捕鱼']
     default:
-      break;
+      break
   }
-  return new Persion(name, age, profession, work);
+  return new Persion(name, age, profession, work)
 }
 ```
 
@@ -126,55 +126,52 @@ function Factory(name, age, profession) {
   // name 你的名字
   // choose 你的选择
   function factory(name, choose) {
-    let stu = [];
-    if (type === "理科生") {
-      stu = ["敲代码", "摸鱼"];
+    let stu = []
+    if (type === '理科生') {
+      stu = ['敲代码', '摸鱼']
     } else {
-      stu = ["琴棋", "书画"];
+      stu = ['琴棋', '书画']
     }
-    return new Student(name, stu);
+    return new Student(name, stu)
   }
 
-  const yayxs = factory("洋小洋同学", "理科生");
+  const yayxs = factory('洋小洋同学', '理科生')
   ```
 
-## 单例模式(vuex 中应用)
+## 单例模式 The Singleton Pattern
 
 - 定义：保证一个类仅有一个实例，并提供一个访问它的全局访问点。
-- 应用：我们的`vuex` 就是应用了单例模式保证全局`store` 还有浏览器的`window对象`
-- 思路：是用一个变量来标志当前是否已经为某个类创建过对象，如果是，则在下一次获取该类的实例时，直接返回之前创建的对象
+- 一些应用场景：线程池 全局缓存 还有浏览器的`window对象`
+- 优秀的项目：我们的`vuex` 就是应用了单例模式保证全局`store`
+- 实现的思路：是用一个变量来标志当前是否已经为某个类创建过对象，如果是，则在下一次获取该类的实例时，直接返回之前创建的对象
 
-比如我们设想一个场景，我们的压岁钱我们自己存着，里边存着自己的收入但是我们已经花的只剩下 10 块了，我的妈妈眼里我的压岁钱还是那么多（只是因为又 new 了一次）
+如果能封装一个全局缓存的话，大致包括 `get` 和 `set`
 
-```javascript
-
-        function 压岁钱(){
-            this.money = 100000
-        }
-        const 我的压岁钱 = new 压岁钱()
-        我的压岁钱.money = 10块
-
-
-        // 我的妈妈
-        const 我的妈妈的概念里的压岁钱 = new 压岁钱()
-
-        我的妈妈的概念里的压岁钱.money = 100000
+```js
+class Storage {
+  get(k) {
+    return localStorage.getItem(k)
+  }
+  set(k, val) {
+    return localStorage.setItem(k, val)
+  }
+}
 ```
 
-也就是说不管我们怎么`new` 返回的都是同一个实例，
+一些实现思路：
 
 ```js
 class SingletonMode {
   sayHi() {
-    console.log("你好，我是单例模式");
+    console.log('你好，我是单例模式')
   }
   static isHaveInstance() {
     if (!SingletonMode.isHaveInstance) {
       // 不存在采取重新创建
-      SingletonMode.instance = new SingletonMode();
+      SingletonMode.instance = new SingletonMode()
     }
 
-    return SingletonMode.instance;
+    return SingletonMode.instance
   }
 }
 ```
@@ -182,14 +179,92 @@ class SingletonMode {
 我们还是简单的说一下`vuex` 中，如果我们不能控制全局一个`vuex` 的话，那我们的数据就会乱了套了，不是吗
 
 ```javascript
-let vue;
+let vue
 export function install(_vue) {
   if (Vue && _vue === vue) {
     // 首先都是先判断是否已经存在，如果已经存在的话就不重新创建了
-    return;
+    return
   }
-  Vue = _vue;
+  Vue = _vue
 }
+```
+
+我们通过上述的的 code 片段，能够得到要想实现单例模式，可以用一个变量来标记这个类是否已经创建过对象，接着完善一下`全局缓存`
+
+```js
+class Storage {
+  static getIns() {
+    // 判断是否已经new 过
+    if (!Storage.instance) {
+      Storage.instance = new Storage()
+    }
+    return Storage.instance
+  }
+  get(k) {
+    return localStorage.getItem(k)
+  }
+  set(k, val) {
+    return localStorage.setItem(k, val)
+  }
+}
+```
+
+不过在`js` 中，全局变量不是单例模式
+
+## 策略模式 Strategy Pattern
+
+```js
+/**
+ * 策略模式：定义一系列的算法，把它们一个个封装起来，并且使它们可以相互替换
+ */
+
+const strategies = {
+  // 不为空
+  isNonEmpty: function (val, errMsg) {
+    if (val === '') {
+      return errMsg
+    }
+  },
+  // 限制最小长度
+  minLen(val, len, errMsg) {
+    if (val.length < len) {
+      return errMsg
+    }
+  },
+  // 是否是手机号
+  isMo(val, errMsg) {
+    if (/(^1[3|5|8][0-9]{9}$)/.test(val)) {
+      return errMsg
+    }
+  },
+}
+/**
+ * 校验函数
+ */
+const validateFunc = function () {
+  const v = new Validator() // 创建校验对象
+  v.add()
+  v.add()
+  v.add()
+
+  const errMsg = v.start() // 获得校验结果
+}
+
+const formNode = document.getElementById('form')
+formNode.onsubmit = function () {
+  const errMsg = validateFunc()
+  if (errMsg) {
+    // 如果errMsg 有返回值 说明校验没有通过
+    return false
+  }
+}
+
+function Validator() {
+  this.cache = [] // 保存校验规则
+}
+
+Validator.prototype.add = function () {}
+Validator.prototype.start = function () {}
 ```
 
 ## 原型模式(创建一个对象)
@@ -207,21 +282,21 @@ export function install(_vue) {
 ```js
 class Coder1 {
   constructor(name, age) {
-    this.name = name;
-    this.age = age;
+    this.name = name
+    this.age = age
   }
   like() {
-    console.log("i like mofish");
+    console.log('i like mofish')
   }
 }
 
 function Coder2(name, age) {
-  this.name = name;
-  this.age = age;
+  this.name = name
+  this.age = age
 }
 Coder2.prototype.like = function () {
-  console.log("i like mofish");
-};
+  console.log('i like mofish')
+}
 ```
 
 - `构造函数Coder2`.prototype.constructor===构造函数 Coder2
@@ -233,39 +308,39 @@ Coder2.prototype.like = function () {
 
 ```javascript
 function Student(name, age, sex) {
-  this.name = name;
-  this.age = age;
-  this.sex = sex;
+  this.name = name
+  this.age = age
+  this.sex = sex
 
   function sayName() {
-    console.log(`Iam ${this.name}`);
+    console.log(`Iam ${this.name}`)
   }
 }
 
-const 王二花 = new Student("", "", "");
-const 李二蛋 = new Student("", "", "");
+const 王二花 = new Student('', '', '')
+const 李二蛋 = new Student('', '', '')
 ```
 
 这时候我们可以把通用的能力放在`构造函数` 的外部，然后类似这样的代码
 
 ```javascript
 function Student(name, age, sex) {
-  this.name = name;
-  this.age = age;
-  this.sex = sex;
+  this.name = name
+  this.age = age
+  this.sex = sex
   // 引用了sayName函数
-  this.sayName = sayName;
+  this.sayName = sayName
 }
 
 function sayName() {
-  console.log(`Iam ${this.name}`);
+  console.log(`Iam ${this.name}`)
 }
 ```
 
 接着我们使用原型的方式，类似上文的程序员 `coder` 然后把通用的能力（这里暂且这样称之吧） 放在原型上
 
 ```javascript
-Student.prototype.sayName = function () {};
+Student.prototype.sayName = function () {}
 ```
 
 ## 装饰器模式(Nest.js 中应用）
@@ -273,13 +348,13 @@ Student.prototype.sayName = function () {};
 它的定义是“在不改变原对象的基础上，通过对其进行包装拓展，使原有对象可以满足用户的更复杂需求”。
 
 ```ts
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get } from '@nestjs/common'
 
-@Controller("cats")
+@Controller('cats')
 export class CatsController {
   @Get()
   findAll(): string {
-    return "This action returns all cats";
+    return 'This action returns all cats'
   }
 }
 ```
@@ -290,7 +365,7 @@ export class CatsController {
   - 至于为什么说在`axios` 中有应用，之所以`axios` 是如此优秀的一个库，是因为它的 api 足够统一，却带来的在`浏览器` 以及`node` 环境 统一的请求能力，这是因为在库中已经做了适配，调用者使用者只需要传入统一化的参数即可
   - 还有就是在`vue` 的组件化开发中使用计算属性对一些怪异的数据进行转换适配等
 
-## 代理模式(Proxy)
+## 代理模式 Proxy Pattern
 
 - 定义：在某些情况下，出于种种考虑/限制，一个对象不能直接访问另一个对象，需要一个第三者（代理）牵线搭桥从而间接达到访问目的，这样的模式就是代理模式。`es6中` 的`proxy` 一个 Proxy 对象包装另一个对象并拦截诸如读取写入等其他的操作,简言之，拦截对象的操作。为一个对象提供一个代用品或占位符，以便控制对它的访问
 - 场景：图片的懒加载、合并`http `请求
@@ -302,9 +377,9 @@ export class CatsController {
 
 ```js
 const user = {
-  name: "洋小洋同学",
+  name: 'lee',
   age: 18,
-};
+}
 
 /**
  * 参数一 target目标对象  要包装的对象（可以是函数）
@@ -319,47 +394,211 @@ const proxy = new Proxy(user, {
    * 参数四
    */
   set: function (user, key, val) {},
-});
+})
 ```
 
-值的一说就是我们的事件代理模式，点击`li` 的时候让父级的`ul` 去代理等等，
+虚拟代理的一种场景，图片的预加载
 
-## 观察者模式(vue 的响应式原理)
+```js
+const loadImg = (function () {
+  const imgNode = document.createElement('img')
+  document.body.appendChild(imgNode)
+
+  return function (src) {
+    imgNode.src = src
+  }
+})()
+
+const proxyImg = (function () {
+  const i = new Image()
+  i.onload = function () {
+    loadImg(this.src)
+  }
+
+  return function (src) {
+    loadImg('xxx')
+    i.src = src
+  }
+})()
+```
+
+## 观察者模式/发布-订阅模式
 
 观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个目标对象，当这个目标对象的状态发生变化时，会通知所有观察者对象，使它们能够自动更新，有人也称之为`发布者订阅模式`
 
 ```js
+/**
+ * 发布订阅：又叫做观察者模式：定义对象间的一种一对多的依赖关系，当一个对象的形态发生变化时，所有依赖于它的对象都得到通知
+ * 两个重要的角色 发布者 订阅者
+ */
+
+/**
+ * 发布者
+ */
 class Publisher {
   constructor() {
-    this.observers = [];
-    console.log("init");
+    this.observers = []
+    console.log('发布者 constructor执行')
   }
-  add(observer) {
-    console.log("add");
-    this.observers.push(observer);
+  addOne(observer) {
+    console.log('发布者 增加订阅者')
+    this.observers.push(observer)
   }
-  remove(observer) {
-    console.log("remove");
-    this.observers.forEach((item, i) => {
+  removeOne(observer) {
+    console.log('发布者 移除订阅者')
+    const len = this.observers.length
+    for (let i = 0; i < len; i++) {
+      const item = this.observers[i]
       if (item === observer) {
-        this.observers.splice(i, 1);
+        this.observers.splice(i, 1)
       }
-    });
+    }
   }
-  notify() {
-    console.log("notify");
+  notifyAll() {
+    console.log('发布者 通知所有的订阅者')
     this.observers.forEach((item) => {
-      item.update(this);
-    });
+      item.update(this)
+    })
   }
 }
 
+/**
+ * 订阅者 被通知 被执行
+ */
 class Observer {
   constructor() {
-    console.log("init");
+    console.log('订阅者 constructor执行')
   }
   update() {
-    console.log("update");
+    console.log('订阅者 更新')
   }
 }
 ```
+
+```js
+/**
+ * 发布者-订阅模式
+ */
+class EventEmitter {
+  constructor() {
+    this.handlers = {} // 存放事件和回调之间的对应关系
+    // { 'a' ,[ ()=>{},()=>{}]}
+  }
+
+  on(eventName, cb) {
+    // 判断map中是否有这个eventName
+    if (!this.handlers[eventName]) {
+      this.handlers[eventName] = []
+    }
+    this.handlers[eventName].push(cb)
+  }
+
+  emit(eventName, ...args) {
+    // 是否有监听函数队列
+    if (this.handlers[eventName]) {
+      // slice 浅拷贝
+      const handlers = this.handlers[eventName].slice()
+      handlers.forEach((cb) => {
+        cb(...args)
+      })
+    }
+  }
+
+  off(eventName, cb) {
+    const cbs = this.handlers[eventName]
+    const index = cbs.indexOf(cb)
+    if (index !== -1) {
+      cbs.splice(index, 1)
+    }
+  }
+}
+```
+
+## 迭代器模式 Iterator
+
+```js
+/**
+ * 迭代器模式是指提供一种方法顺序访问一个聚合对象中的各个元素，不需要暴露该对象的内部表示
+ * 迭代器分为：内部迭代器和外部迭代器
+ * 聚合对象：拥有length属性 可以通过下标访问
+ * 迭代器模式：目的性极强的设计模式，解决的问题就是遍历
+ */
+
+const Iterator = function (obj) {
+  let curr = 0
+
+  let next = function () {
+    curr += 1
+  }
+  let done = function () {
+    return curr >= obj.length
+  }
+  let getCurr = function () {
+    return obj[curr]
+  }
+  return {
+    next,
+    done,
+    getCurr,
+  }
+}
+
+function iteratorGenerator(list) {
+  let idx = 0 // 记录当前的索引
+  let len = list.length
+
+  return {
+    next() {
+      let done = idx >= len
+      let value = !done ? list[idx++] : undefined
+
+      return {
+        done,
+        value,
+      }
+    },
+  }
+}
+```
+
+`MDN` 有关于 [**迭代协议**](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Iteration_protocols) 相关的内容
+
+## 模式与重构
+
+**设计模式的目的就是为许多重构行为提供目标**
+
+1、提炼函数：把函数的功能点更细粒度
+
+```js
+// 每个函数判断一种类型
+const toString = Object.prototype.toString
+const hasOwnProperty = Object.prototype.hasOwnProperty
+
+const isObject = (value) => {
+  return toString.call(value) === '[object Object]'
+}
+
+const isArray = (value) => {
+  return toString.call(value) === '[object Array]'
+}
+```
+
+2、过长的条件分支语句拆成函数
+
+```js
+const nameOk = (val) => {
+  if (typeof val !== 'string') return false
+  const NAME_KW_ARR = ['van', 'lee']
+  const nameOk = NAME_KW_ARR.some((name) => val.includes(name))
+
+  return nameOk
+}
+```
+
+3、少使用三目运算符
+4、使用`return` 退出多层循环
+
+## 资料
+
+- [JavaScript patterns](https://www.patterns.dev/posts/introduction/)
+- [设计模式](https://refactoringguru.cn/design-patterns)
