@@ -1,29 +1,32 @@
+class JuTiFactory extends ChouXiangFactory {
+  base() {
+    return new Base()
+  }
+}
+
 /**
  * 工厂模式创建对象的过程单独封装
- * @param {*} name 
- * @param {*} age 
- * @param {*} type 
- * @returns 
+ * @param {*} name
+ * @param {*} age
+ * @param {*} type
+ * @returns
  */
-function Factory(name,age,type){
+function Factory(name, age, type) {
   let work
   switch (type) {
     case 'jser':
       // return new JSer(name,age)
       work = ['code']
-      break;
-  
+      break
+
     default:
-      break;
+      break
   }
 
-  return new CreateUser(name,age,type,work)
+  return new CreateUser(name, age, type, work)
 }
 
-
-function CreateUser(name,age,type,){
-
-}
+function CreateUser(name, age, type) {}
 
 /**
  * 抽象工厂：抽象类 不能被用于生成具体实例 围绕一个超级工厂创建其他工厂

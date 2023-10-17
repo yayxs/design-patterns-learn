@@ -9,43 +9,45 @@
     <script>
       class Coder1 {
         constructor(name, age) {
-          this.name = name;
-          this.age = age;
+          this.name = name
+          this.age = age
         }
         like() {
-          console.log("i like mofish");
+          console.log('i like mofish')
         }
       }
       function Coder2(name, age) {
-        this.name = name;
-        this.age = age;
+        this.name = name
+        this.age = age
       }
-      Coder2.prototype.like = function() {
-        console.log("i like mofish");
-      };
+      Coder2.prototype.like = function () {
+        console.log('i like mofish')
+      }
 
-      const coderYayxs = new Coder2("yayxs", 20);
+      const coderYayxs = new Coder2('yayxs', 20)
 
       // console.log(Coder2.prototype); // 原型对象 {like: ƒ, constructor: ƒ}
 
       // console.log(Coder2.prototype.constructor===Coder2)
       // console.log(coderYayxs.__proto__) // 原型对象 {like: ƒ, constructor: ƒ}
 
-      coderYayxs.like(); //  i like mofish
+      coderYayxs.like() //  i like mofish
       // console.log(coderYayxs.hasOwnProperty('like'))
 
       function Student(name, age, sex) {
-        this.name = name;
-        this.age = age;
-        this.sex = sex;
-        this.sayName = sayName;
+        this.name = name
+        this.age = age
+        this.sex = sex
+        this.sayName = sayName
       }
 
       function sayName() {
-        console.log(`Iam ${this.name}`);
+        console.log(`Iam ${this.name}`)
       }
 
-      Student.prototype.sayName = function() {};
+      Student.prototype.sayName = function () {}
     </script>
+
+    <script src="./index.js" type="module"></script>
   </body>
 </html>

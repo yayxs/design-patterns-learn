@@ -1,10 +1,10 @@
 # JavaScript 设计模式
 
-> 本文较少包含原生 js 的原型以及原型链的相关内容，以及手写 vue 的发布者-订阅模式。后续会更新在手写实现系列
+> 本文较少包含原生 js 的原型以及原型链的相关内容，以及手写 vue 的发布者-订阅模式。
 
 ## 前言
 
-不知不觉这已经是前端厚说的第四大篇了，在前端的圈子里很少有人分享设计模式相关的，东西至于为什么分享这篇，我想我有几点要说的
+在前端的圈子里很少有人分享设计模式相关的，东西至于为什么分享这篇，我想我有几点要说的
 
 - 1 设计模式是大学里的导师才会提及的，在实际的开发中很少用到，会写代码不算的优秀，会组织代码才行
 - 2 面试的时候面试你的不仅仅是前端开发者，一些“上了年纪的”领导基本都会问你设计模式，因为这是他们基本功
@@ -140,43 +140,74 @@ function Factory(name, age, profession) {
 
 ## 单例模式 The Singleton Pattern
 
-- 定义：保证一个类仅有一个实例，并提供一个访问它的全局访问点。
-- 一些应用场景：线程池 全局缓存 还有浏览器的`window对象`
-- 优秀的项目：我们的`vuex` 就是应用了单例模式保证全局`store`
-- 实现的思路：是用一个变量来标志当前是否已经为某个类创建过对象，如果是，则在下一次获取该类的实例时，直接返回之前创建的对象
+### 什么是单例模式
 
-如果能封装一个全局缓存的话，大致包括 `get` 和 `set`
+```sh
+什么是单例模式：保证一个类仅有一个实例，并提供一个访问它的全局访问点。
+对象只需一个（前端中的应用场景）：线程池 全局缓存 还有浏览器的`window对象`
+优秀的项目：我们的`vuex` 就是应用了单例模式保证全局`store`
+
+```
+
+### 实现一个简单的单例模式
+
+```sh
+实现单例模式的思路：
+要实现一个标准的单例模式并不复杂，无非是用一个变量来标志当前是否已经为某个类创建
+过对象，如果是，则在下一次获取该类的实例时，直接返回之前创建的对象
+
+```
 
 ```js
-class Storage {
-  get(k) {
-    return localStorage.getItem(k)
+/**
+ * 单例模式的基本实现 保证一个类仅仅有一个实例
+ * 保证一个类仅有一个实例 提供一个访问它的全局访问点
+ *
+ * 页面中的常见的 全局唯一的弹窗（页面中一般是只显示一个弹窗） 线程池 全局缓存封装 浏览器中 window
+ *
+ */
+
+function Func(name) {
+  this.name = name
+  this.instance = null
+}
+
+Func.prototype.getName = function () {
+  console.log(this.name)
+}
+
+// 获取实例
+
+Func.getInstance = function (name) {
+  if (!this.instance) {
+    this.instance = new Func(name)
   }
-  set(k, val) {
-    return localStorage.setItem(k, val)
-  }
+
+  return this.instance
 }
 ```
 
-一些实现思路：
+### 使用闭包来实现
 
 ```js
-class SingletonMode {
-  sayHi() {
-    console.log('你好，我是单例模式')
-  }
-  static isHaveInstance() {
-    if (!SingletonMode.isHaveInstance) {
-      // 不存在采取重新创建
-      SingletonMode.instance = new SingletonMode()
+/**
+ * 使用闭包来实现
+ */
+
+class PatternDanli {}
+PatternDanli.getInstance = (function () {
+  let instance = null
+
+  return function () {
+    if (!instance) {
+      instance = new PatternDanli()
     }
-
-    return SingletonMode.instance
+    return instance
   }
-}
+})()
 ```
 
-我们还是简单的说一下`vuex` 中，如果我们不能控制全局一个`vuex` 的话，那我们的数据就会乱了套了，不是吗
+我们还是简单的说一下`vuex` ：单个 vue 应用共享一个 store
 
 ```javascript
 let vue
@@ -209,7 +240,76 @@ class Storage {
 }
 ```
 
-不过在`js` 中，全局变量不是单例模式
+不过注意：在`js` 中，全局变量不是单例模式
+
+### 实操：实现一个全局的 Storage
+
+```js
+class BaseLocalStorage {
+  /**
+   * 静态方法判断是否已经 new 过 1个实例
+   */
+  static getInstance() {
+    // 没有new 过
+    if (!BaseLocalStorage.instance) {
+      BaseLocalStorage.instance = new BaseLocalStorage()
+    }
+
+    // 如果已经存在这个唯一的实例直接返回
+    return BaseLocalStorage.instance
+  }
+
+  // 设置数据 如果value是obj 调用JSON.stringify转换为字符串
+  static set(key, value) {
+    if (!localStore) {
+      return
+    }
+    let v = value
+    try {
+      if (typeof value === 'object') {
+        v = JSON.stringify(v)
+      }
+      localStore.setItem(key, v)
+    } catch (error) {
+      // error
+    }
+  }
+  // 直接读取
+  static get(key) {
+    if (!localStore) {
+      return
+    }
+    return localStore.getItem(key)
+  }
+  // 读取转Obj
+  static get2Json(key) {
+    if (!localStore) {
+      return
+    }
+    const data = localStore.getItem(key)
+    if (data) {
+      try {
+        return JSON.parse(data)
+      } catch (error) {
+        // todo error
+      }
+    }
+
+    return null
+  }
+  // 直接移除
+  static remove(key) {
+    if (!localStore) {
+      return
+    }
+    try {
+      localStore.removeItem(key)
+    } catch (error) {
+      // todo error
+    }
+  }
+}
+```
 
 ## 策略模式 Strategy Pattern
 
@@ -236,7 +336,7 @@ const strategies = {
     if (/(^1[3|5|8][0-9]{9}$)/.test(val)) {
       return errMsg
     }
-  },
+  }
 }
 /**
  * 校验函数
@@ -267,11 +367,13 @@ Validator.prototype.add = function () {}
 Validator.prototype.start = function () {}
 ```
 
-## 原型模式(创建一个对象)
+## 原型模式
 
-> 在 Brendan Eich 为 JavaScript 设计面向对象系统时，借鉴了 Self 和 Smalltalk 这两门基于原型
-> 的语言。之所以选择基于原型的面向对象系统，并不是因为时间匆忙，它设计起来相对简单，而
-> 是因为从一开始 Brendan Eich 就没有打算在 JavaScript 中加入类的概念。
+```sh
+1、原型模式是设计模式 也是编程范式
+2、Object.create 是原型模式的实现
+3、语言设计的背景：在 Brendan Eich 为 JavaScript 设计面向对象系统时，借鉴了 Self 和 Smalltalk 这两门基于原型的语言。之所以选择基于原型的面向对象系统，并不是因为时间匆忙，它设计起来相对简单，而 是因为从一开始 Brendan Eich 就没有打算在 JavaScript 中加入类的概念。
+```
 
 接下来我们提到的原型模式不仅仅是一个设计模式，也被称之为一种编程的泛型。
 
@@ -343,6 +445,28 @@ function sayName() {
 Student.prototype.sayName = function () {}
 ```
 
+### 精明概要的总结
+
+- 在 js 中原型是一种范式
+- 具体体现在
+
+```js
+function GouZaoFunc() {}
+console.log('构造函数的prototype === 构造函数的原型对象', GouZaoFunc.prototype)
+
+const insObj = new GouZaoFunc()
+
+console.log(
+  '实例对象的__proto__ === 构造函数的原型对象',
+  insObj.__proto__ === GouZaoFunc.prototype
+)
+
+console.log(
+  '构造函数的原型对象的constructor === 构造函数',
+  GouZaoFunc.prototype.constructor === GouZaoFunc
+)
+```
+
 ## 装饰器模式(Nest.js 中应用）
 
 它的定义是“在不改变原对象的基础上，通过对其进行包装拓展，使原有对象可以满足用户的更复杂需求”。
@@ -378,7 +502,7 @@ export class CatsController {
 ```js
 const user = {
   name: 'lee',
-  age: 18,
+  age: 18
 }
 
 /**
@@ -393,7 +517,7 @@ const proxy = new Proxy(user, {
    * 参数三 val 目标属性的值
    * 参数四
    */
-  set: function (user, key, val) {},
+  set: function (user, key, val) {}
 })
 ```
 
@@ -539,7 +663,7 @@ const Iterator = function (obj) {
   return {
     next,
     done,
-    getCurr,
+    getCurr
   }
 }
 
@@ -554,9 +678,9 @@ function iteratorGenerator(list) {
 
       return {
         done,
-        value,
+        value
       }
-    },
+    }
   }
 }
 ```
